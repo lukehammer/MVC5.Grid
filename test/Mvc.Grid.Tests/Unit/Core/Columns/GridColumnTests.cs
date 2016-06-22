@@ -283,6 +283,12 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             AssertFilterNameFor(model => model.DecimalField, "Number");
         }
+        
+        [Fact]
+        public void AddProperty_SetsFilterNameForString()
+        {
+            AssertFilterNameFor(model => model.StringField, "Text");
+        }
 
         [Fact]
         public void AddProperty_SetsFilterNameForBoolean()
@@ -383,7 +389,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void AddProperty_SetsFilterNameForOtherTypes()
         {
-            AssertFilterNameFor(model => model.StringField, "Text");
+            AssertFilterNameFor(model => model, null);
         }
 
         [Fact]
