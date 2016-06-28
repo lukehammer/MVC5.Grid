@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using Xunit;
@@ -16,7 +17,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridPagerTests()
         {
             grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = HttpUtility.ParseQueryString("");
+            grid.Query = new NameValueCollection();
             grid.Name = "Grid";
 
             pager = new GridPager<GridModel>(grid);
@@ -95,7 +96,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(-1)]
         public void CurrentPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 currentPage)
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString("");
+            pager.Grid.Query = new NameValueCollection();
             pager.CurrentPage = currentPage;
 
             Int32 actual = pager.CurrentPage;
@@ -155,7 +156,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(-1)]
         public void RowsPerPage_OnLessOrEqualToZeroCurrentPageReturnsOne(Int32 rowsPerPage)
         {
-            pager.Grid.Query = HttpUtility.ParseQueryString("");
+            pager.Grid.Query = new NameValueCollection();
             pager.RowsPerPage = rowsPerPage;
 
             Int32 actual = pager.RowsPerPage;

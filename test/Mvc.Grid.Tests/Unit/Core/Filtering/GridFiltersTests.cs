@@ -309,7 +309,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_OverridesAlreadyRegisteredNullableFilter()
+        public void Register_Overrides_NullableFilter()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 
@@ -325,7 +325,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Fact]
-        public void Register_OverridesAlreadyRegisteredFilter()
+        public void Register_Overrides_Filter()
         {
             IDictionary<String, Type> filterPairs = new Dictionary<String, Type> { { "Test", typeof(Object) } };
 

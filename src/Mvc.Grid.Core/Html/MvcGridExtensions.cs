@@ -13,10 +13,7 @@ namespace NonFactors.Mvc.Grid
         }
         public static HtmlGrid<T> Grid<T>(this HtmlHelper html, String partialViewName, IEnumerable<T> source) where T : class
         {
-            HtmlGrid<T> grid = new HtmlGrid<T>(html, new Grid<T>(source));
-            grid.PartialViewName = partialViewName;
-
-            return grid;
+            return new HtmlGrid<T>(html, new Grid<T>(source)) { PartialViewName = partialViewName };
         }
 
         public static MvcHtmlString AjaxGrid(this HtmlHelper html, String dataSource)

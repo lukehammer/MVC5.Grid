@@ -283,7 +283,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         {
             AssertFilterNameFor(model => model.DecimalField, "Number");
         }
-        
+
         [Fact]
         public void AddProperty_SetsFilterNameForString()
         {
@@ -624,7 +624,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_GetsHtmlContentRenderValue(String value, String format, Boolean isEncoded, String expected)
+        public void ValueFor_RenderValue_Html(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
             column.RenderValue = (model) => model.Content;
@@ -633,6 +633,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Format = format;
 
             String actual = column.ValueFor(row).ToString();
+            String expected = renderedValue;
 
             Assert.Equal(expected, actual);
         }
@@ -644,7 +645,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, false, "<name>")]
         [InlineData("<name>", "For <{0}>", true, "<name>")]
         [InlineData("<name>", "For <{0}>", false, "<name>")]
-        public void ValueFor_GetsHtmlContentExpressionValue(String value, String format, Boolean isEncoded, String expected)
+        public void ValueFor_ExpressionValue_Html(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Content = value == null ? null : new HtmlString(value) });
             column = new GridColumn<GridModel, Object>(grid, model => model.Content);
@@ -652,6 +653,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             column.Format = format;
 
             String actual = column.ValueFor(row).ToString();
+            String expected = expressionValue;
 
             Assert.Equal(expected, actual);
         }
@@ -663,7 +665,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_ReturnsRenderValue(String value, String format, Boolean isEncoded, String renderedValue)
+        public void ValueFor_RenderValue(String value, String format, Boolean isEncoded, String renderedValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.RenderValue = (model) => model.Name;
@@ -684,7 +686,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData("<name>", null, true, "&lt;name&gt;")]
         [InlineData("<name>", "For <{0}>", false, "For <<name>>")]
         [InlineData("<name>", "For <{0}>", true, "For &lt;&lt;name&gt;&gt;")]
-        public void ValueFor_ReturnsExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
+        public void ValueFor_ExpressionValue(String value, String format, Boolean isEncoded, String expressionValue)
         {
             IGridRow<GridModel> row = new GridRow<GridModel>(new GridModel { Name = value });
             column.IsEncoded = isEncoded;

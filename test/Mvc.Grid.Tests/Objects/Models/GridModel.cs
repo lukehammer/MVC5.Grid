@@ -8,7 +8,7 @@ namespace NonFactors.Mvc.Grid.Tests
     {
         [Display(Name = "Text")]
         public String Text { get; set; }
-        
+
         [Display(Name = "Text", ShortName = "Txt")]
         public String ShortText { get; set; }
 

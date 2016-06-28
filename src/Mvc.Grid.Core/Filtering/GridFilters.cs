@@ -157,14 +157,11 @@ namespace NonFactors.Mvc.Grid
             if (keys.Length == 1)
             {
                 String[] values = column.Grid.Query.GetValues(keys[0]);
-                if (values.Length > 1)
-                {
-                    String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
+                if (values.Length < 2) return null;
 
-                    return GetFilter(column, keyType, values[1]);
-                }
+                String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
 
-                return null;
+                return GetFilter(column, keyType, values[1]);
             }
 
             String type = keys[1].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
