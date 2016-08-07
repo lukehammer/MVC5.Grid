@@ -76,6 +76,7 @@
     <Compile Include="Unit\Core\Filtering\GridColumnFilterTests.cs" />
     <Compile Include="Unit\Core\Filtering\GridFiltersTests.cs" />
     <Compile Include="Unit\Core\Filtering\Text\StringEndsWithFilterTests.cs" />
+    <Compile Include="Unit\Core\Filtering\Text\StringNotEqualsFilterTests.cs" />
     <Compile Include="Unit\Core\Filtering\Text\StringStartsWithFilterTests.cs" />
     <Compile Include="Unit\Core\MvcGridTests.cs" />
     <Compile Include="Unit\Core\Filtering\Number\DecimalFilterTests.cs" />

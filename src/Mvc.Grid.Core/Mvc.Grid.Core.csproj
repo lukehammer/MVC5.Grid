@@ -62,6 +62,7 @@
     <Compile Include="Filtering\IGridFilter.cs" />
     <Compile Include="Filtering\IGridFilters.cs" />
     <Compile Include="Filtering\Text\StringEndsWithFilter.cs" />
+    <Compile Include="Filtering\Text\StringNotEqualsFilter.cs" />
     <Compile Include="Filtering\Text\StringStartsWithFilter.cs" />
     <Compile Include="MvcGrid.cs" />
     <Compile Include="Filtering\Text\StringContainsFilter.cs" />
