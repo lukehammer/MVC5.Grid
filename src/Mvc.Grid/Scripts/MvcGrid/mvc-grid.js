@@ -187,6 +187,7 @@ var MvcGrid = (function () {
                         reloadStarted: grid.reloadStarted,
                         reloadFailed: grid.reloadFailed,
                         reloadEnded: grid.reloadEnded,
+                        requestType: grid.requestType,
                         rowClicked: grid.rowClicked,
                         sourceUrl: grid.sourceUrl,
                         filters: grid.filters,
