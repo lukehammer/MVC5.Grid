@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Xunit;
-using Xunit.Extensions;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {

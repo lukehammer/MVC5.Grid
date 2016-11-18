@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using Xunit;
-using Xunit.Extensions;
 
 namespace NonFactors.Mvc.Grid.Tests.Unit
 {
