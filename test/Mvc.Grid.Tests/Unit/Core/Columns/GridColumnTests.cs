@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,9 +13,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class GridColumnTests : IDisposable
     {
-        private GridColumn<GridModel, Object> column;
-        private static IGridFilters oldFilters;
         private IGrid<GridModel> grid;
+        private static IGridFilters oldFilters;
+        private GridColumn<GridModel, Object> column;
 
         static GridColumnTests()
         {
@@ -25,10 +24,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         public GridColumnTests()
         {
             MvcGrid.Filters = Substitute.For<IGridFilters>();
-            grid = Substitute.For<IGrid<GridModel>>();
-            grid.Query = new NameValueCollection();
-            grid.Name = "Grid";
 
+            grid = new Grid<GridModel>(new GridModel[0]);
             column = new GridColumn<GridModel, Object>(grid, model => model.Name);
         }
         public void Dispose()
@@ -105,7 +102,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_ReturnsFromGridFilters()
         {
-            IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
+            GridColumnFilter<GridModel> filter = new GridColumnFilter<GridModel>();
             MvcGrid.Filters.GetFilter(column).Returns(filter);
 
             Object actual = column.Filter;
@@ -117,14 +114,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_Get_Caches()
         {
-            IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
+            GridColumnFilter<GridModel> filter = new GridColumnFilter<GridModel>();
             MvcGrid.Filters.GetFilter(column).Returns(filter);
 
-            IGridColumnFilter<GridModel> currentFilter = column.Filter;
-            filter = Substitute.For<IGridColumnFilter<GridModel>>();
+            IGridColumnFilter<GridModel> cachedFilter = column.Filter;
+            filter = new GridColumnFilter<GridModel>();
+
             MvcGrid.Filters.GetFilter(column).Returns(filter);
 
-            Object expected = currentFilter;
+            Object expected = cachedFilter;
             Object actual = column.Filter;
 
             Assert.Same(expected, actual);
@@ -133,12 +131,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Filter_Set_Caches()
         {
-            IGridColumnFilter<GridModel> filter = Substitute.For<IGridColumnFilter<GridModel>>();
-            MvcGrid.Filters.GetFilter(column).Returns(filter);
+            GridColumnFilter<GridModel> filter = new GridColumnFilter<GridModel>();
 
-            column.Filter = null;
+            column.Filter = new GridColumnFilter<GridModel>();
+            column.Filter = filter;
 
-            Assert.Null(column.Filter);
+            IGridColumnFilter<GridModel> actual = column.Filter;
+            IGridColumnFilter<GridModel> expected = filter;
+
+            Assert.Same(expected, actual);
         }
 
         #endregion
@@ -157,9 +158,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_SetsIsEncoded()
         {
-            column = new GridColumn<GridModel, Object>(grid, model => model.Name);
-
-            Assert.True(column.IsEncoded);
+            Assert.True(new GridColumn<GridModel, Object>(grid, model => model.Name).IsEncoded);
         }
 
         [Fact]
@@ -174,17 +173,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_NotMemberExpression_SetsNullTitle()
         {
-            column = new GridColumn<GridModel, Object>(grid, model => model.ToString());
-
-            Assert.Null(column.Title.ToString());
+            Assert.Null(new GridColumn<GridModel, Object>(grid, model => model.ToString()).Title.ToString());
         }
 
         [Fact]
         public void GridColumn_NoDisplayAttribute_SetsNullTitle()
         {
-            column = new GridColumn<GridModel, Object>(grid, model => model.Name);
-
-            Assert.Null(column.Title.ToString());
+            Assert.Null(new GridColumn<GridModel, Object>(grid, model => model.Name).Title.ToString());
         }
 
         [Fact]
@@ -414,35 +409,25 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void GridColumn_NotNonMemberExpression_IsNotSortable()
         {
-            Boolean? actual = new GridColumn<GridModel, String>(grid, model => model.ToString()).IsSortable;
-            Boolean? expected = false;
-
-            Assert.Equal(expected, actual);
+            Assert.False(new GridColumn<GridModel, String>(grid, model => model.ToString()).IsSortable);
         }
 
         [Fact]
         public void GridColumn_NotNonMemberExpression_IsSortableIsNull()
         {
-            GridColumn<GridModel, Int32> column = new GridColumn<GridModel, Int32>(grid, model => model.Sum);
-
-            Assert.Null(column.IsSortable);
+            Assert.Null(new GridColumn<GridModel, Int32>(grid, model => model.Sum).IsSortable);
         }
 
         [Fact]
         public void GridColumn_NotMemberExpression_IsNotFilterable()
         {
-            Boolean? actual = new GridColumn<GridModel, String>(grid, model => model.ToString()).IsFilterable;
-            Boolean? expected = false;
-
-            Assert.Equal(expected, actual);
+            Assert.False(new GridColumn<GridModel, String>(grid, model => model.ToString()).IsFilterable);
         }
 
         [Fact]
         public void GridColumn_MemberExpression_IsFilterableIsNull()
         {
-            GridColumn<GridModel, Int32> column = new GridColumn<GridModel, Int32>(grid, model => model.Sum);
-
-            Assert.Null(column.IsFilterable);
+            Assert.Null(new GridColumn<GridModel, Int32>(grid, model => model.Sum).IsFilterable);
         }
 
         [Fact]
@@ -703,10 +688,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         private void AssertFilterNameFor<TValue>(Expression<Func<AllTypesModel, TValue>> property, String filterName)
         {
-            IGrid<AllTypesModel> grid = Substitute.For<IGrid<AllTypesModel>>();
-            grid.Query = new NameValueCollection();
-
-            String actual = new GridColumn<AllTypesModel, TValue>(grid, property).FilterName;
+            String actual = new GridColumn<AllTypesModel, TValue>(null, property).FilterName;
             String expected = filterName;
 
             Assert.Equal(expected, actual);

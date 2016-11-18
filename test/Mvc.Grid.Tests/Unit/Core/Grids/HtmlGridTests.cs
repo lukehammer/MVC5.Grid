@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -12,9 +11,9 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 {
     public class HtmlGridTests
     {
-        private HtmlGrid<GridModel> htmlGrid;
-        private IGrid<GridModel> grid;
         private HtmlHelper html;
+        private IGrid<GridModel> grid;
+        private HtmlGrid<GridModel> htmlGrid;
 
         public HtmlGridTests()
         {
@@ -88,8 +87,8 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_SetsHtml()
         {
-            HtmlHelper expected = HtmlHelperFactory.CreateHtmlHelper();
-            HtmlHelper actual = new HtmlGrid<GridModel>(expected, grid).Html;
+            HtmlHelper actual = new HtmlGrid<GridModel>(html, grid).Html;
+            HtmlHelper expected = html;
 
             Assert.Same(expected, actual);
         }
@@ -110,16 +109,11 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Build_Columns()
         {
-            IGridColumnsOf<GridModel> expected = htmlGrid.Grid.Columns;
-            Boolean builderCalled = false;
+            Action<IGridColumnsOf<GridModel>> columns = Substitute.For<Action<IGridColumnsOf<GridModel>>>();
 
-            htmlGrid.Build(actual =>
-            {
-                Assert.Same(expected, actual);
-                builderCalled = true;
-            });
+            htmlGrid.Build(columns);
 
-            Assert.True(builderCalled);
+            columns.Received()(htmlGrid.Grid.Columns);
         }
 
         [Fact]
@@ -433,7 +427,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_Builder_Pager()
         {
-            htmlGrid.Grid.Pager = Substitute.For<IGridPager<GridModel>>();
+            htmlGrid.Grid.Pager = new GridPager<GridModel>(htmlGrid.Grid);
             IGridPager expected = htmlGrid.Grid.Pager;
             Boolean builderCalled = false;
 
@@ -449,7 +443,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_Builder_AddsGridProcessor()
         {
-            htmlGrid.Grid.Processors = new List<IGridProcessor<GridModel>>();
+            htmlGrid.Grid.Processors.Clear();
 
             htmlGrid.Pageable(pager => { });
 
@@ -462,7 +456,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_Builder_DoesNotReadGridProcessor()
         {
-            htmlGrid.Grid.Processors = new List<IGridProcessor<GridModel>>();
+            htmlGrid.Grid.Processors.Clear();
 
             htmlGrid.Pageable(pager => { });
             htmlGrid.Pageable(pager => { });
@@ -524,7 +518,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_AddsGridPagerProcessor()
         {
-            htmlGrid.Grid.Processors = new List<IGridProcessor<GridModel>>();
+            htmlGrid.Grid.Processors.Clear();
 
             htmlGrid.Pageable();
 
@@ -537,7 +531,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void Pageable_DoesNotReaddGridProcessor()
         {
-            htmlGrid.Grid.Processors = new List<IGridProcessor<GridModel>>();
+            htmlGrid.Grid.Processors.Clear();
 
             htmlGrid.Pageable();
             htmlGrid.Pageable();

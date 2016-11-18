@@ -1,5 +1,4 @@
-﻿using NSubstitute;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -14,8 +13,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         public GridColumnsTests()
         {
-            columns = new GridColumns<GridModel>(Substitute.For<IGrid<GridModel>>());
-            columns.Grid.Processors = new List<IGridProcessor<GridModel>>();
+            columns = new GridColumns<GridModel>(new Grid<GridModel>(new GridModel[0]));
             columns.Grid.Query = new NameValueCollection();
         }
 
