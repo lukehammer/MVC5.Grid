@@ -8,31 +8,31 @@ namespace NonFactors.Mvc.Grid.Tests
 {
     public class HtmlHelperFactory
     {
-        public static HtmlHelper CreateHtmlHelper(String queryString = null)
+        public static HtmlHelper CreateHtmlHelper(String query)
         {
-            ViewContext viewContext = CreateViewContext(CreateControllerContext(queryString));
-            IViewDataContainer viewDataContainer = new ViewPage();
-            viewDataContainer.ViewData = viewContext.ViewData;
+            ViewContext context = CreateViewContext(CreateControllerContext(query));
+            IViewDataContainer data = new ViewPage();
+            data.ViewData = context.ViewData;
 
-            return new HtmlHelper(viewContext, viewDataContainer);
+            return new HtmlHelper(context, data);
         }
 
-        private static ControllerContext CreateControllerContext(String queryString)
+        private static ControllerContext CreateControllerContext(String query)
         {
-            HttpContextBase http = HttpContextFactory.CreateHttpContextBase(queryString);
+            HttpContextBase http = HttpContextFactory.CreateHttpContextBase(query);
 
             return new ControllerContext(http, http.Request.RequestContext.RouteData, Substitute.For<ControllerBase>());
         }
-        private static ViewContext CreateViewContext(ControllerContext controllerContext)
+        private static ViewContext CreateViewContext(ControllerContext controller)
         {
-            ViewContext viewContext = new ViewContext(
-                controllerContext,
+            ViewContext context = new ViewContext(
+                controller,
                 Substitute.For<IView>(),
                 new ViewDataDictionary(),
                 new TempDataDictionary(),
                 new StringWriter());
 
-            return viewContext;
+            return context;
         }
     }
 }

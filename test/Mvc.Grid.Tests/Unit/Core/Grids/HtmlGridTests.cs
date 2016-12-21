@@ -56,7 +56,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void HtmlGrid_DoesNotChangeHttpContext()
         {
-            HttpContextBase httpContext = grid.HttpContext = HttpContextFactory.CreateHttpContextBase();
+            HttpContextBase httpContext = grid.HttpContext = HttpContextFactory.CreateHttpContextBase("");
 
             Object actual = new HtmlGrid<GridModel>(html, grid).Grid.HttpContext;
             Object expected = httpContext;
@@ -156,13 +156,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Filterable(Boolean isFilterable)
 
         [Theory]
-        [InlineData(null, false, false)]
-        [InlineData(null, true, true)]
-        [InlineData(false, false, false)]
-        [InlineData(false, true, false)]
-        [InlineData(true, false, true)]
         [InlineData(true, true, true)]
-        public void Filterable_Set_IsFilterable(Boolean? isColumnFilterable, Boolean isGridFilterable, Boolean? expectedIsFilterable)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        [InlineData(null, true, true)]
+        [InlineData(null, false, false)]
+        public void Filterable_Set_IsFilterable(Boolean? isColumnFilterable, Boolean isGridFilterable, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
                 column.IsFilterable = isColumnFilterable;
@@ -170,7 +170,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             htmlGrid.Filterable(isGridFilterable);
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expectedIsFilterable, actual.IsFilterable);
+                Assert.Equal(filterable, actual.IsFilterable);
         }
 
         [Fact]
@@ -190,15 +190,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void MultiFilterable_SetsIsMultiFilterable(Boolean? isMultiFilterable, Boolean? expected)
+        public void MultiFilterable_SetsIsMultiFilterable(Boolean? multi, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsMultiFilterable = isMultiFilterable;
+                column.IsMultiFilterable = multi;
 
             htmlGrid.MultiFilterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.IsMultiFilterable);
+                Assert.Equal(filterable, actual.IsMultiFilterable);
         }
 
         [Fact]
@@ -218,15 +218,15 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [InlineData(null, true)]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public void Filterable_SetsIsFilterable(Boolean? isColumnFilterable, Boolean? expected)
+        public void Filterable_SetsIsFilterable(Boolean? isFilterable, Boolean? filterable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsFilterable = isColumnFilterable;
+                column.IsFilterable = isFilterable;
 
             htmlGrid.Filterable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expected, actual.IsFilterable);
+                Assert.Equal(filterable, actual.IsFilterable);
         }
 
         [Fact]
@@ -243,13 +243,13 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #region Sortable(Boolean isSortable)
 
         [Theory]
-        [InlineData(null, false, false)]
-        [InlineData(null, true, true)]
-        [InlineData(false, false, false)]
-        [InlineData(false, true, false)]
-        [InlineData(true, false, true)]
         [InlineData(true, true, true)]
-        public void Sortable_Set_IsSortable(Boolean? isColumnSortable, Boolean isGridSortable, Boolean? expectedIsSortable)
+        [InlineData(true, false, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        [InlineData(null, true, true)]
+        [InlineData(null, false, false)]
+        public void Sortable_Set_IsSortable(Boolean? isColumnSortable, Boolean isGridSortable, Boolean? sortable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
                 column.IsSortable = isColumnSortable;
@@ -257,7 +257,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
             htmlGrid.Sortable(isGridSortable);
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expectedIsSortable, actual.IsSortable);
+                Assert.Equal(sortable, actual.IsSortable);
         }
 
         [Fact]
@@ -275,17 +275,17 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         [Theory]
         [InlineData(null, true)]
-        [InlineData(false, false)]
         [InlineData(true, true)]
-        public void Sortable_SetsIsSortableToTrue(Boolean? isColumnSortable, Boolean? expectedIsSortable)
+        [InlineData(false, false)]
+        public void Sortable_SetsIsSortableToTrue(Boolean? isSortable, Boolean? sortable)
         {
             foreach (IGridColumn column in htmlGrid.Grid.Columns)
-                column.IsSortable = isColumnSortable;
+                column.IsSortable = isSortable;
 
             htmlGrid.Sortable();
 
             foreach (IGridColumn actual in htmlGrid.Grid.Columns)
-                Assert.Equal(expectedIsSortable, actual.IsSortable);
+                Assert.Equal(sortable, actual.IsSortable);
         }
 
         [Fact]

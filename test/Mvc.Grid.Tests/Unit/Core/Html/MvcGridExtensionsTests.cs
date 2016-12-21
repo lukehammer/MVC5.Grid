@@ -14,7 +14,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
 
         static MvcGridExtensionsTests()
         {
-            html = HtmlHelperFactory.CreateHtmlHelper();
+            html = HtmlHelperFactory.CreateHtmlHelper("");
         }
 
         #region Grid<T>(this HtmlHelper html, IEnumerable<T> source)
