@@ -9,6 +9,6 @@ using Xunit;
 [assembly: AssemblyCompany("NonFactors")]
 [assembly: AssemblyCopyright("Copyright © NonFactors")]
 [assembly: NeutralResourcesLanguage("en")]
-[assembly: AssemblyFileVersion("3.3.0.0")]
-[assembly: AssemblyVersion("3.3.0.0")]
+[assembly: AssemblyFileVersion("3.4.0.0")]
+[assembly: AssemblyVersion("3.4.0.0")]
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
