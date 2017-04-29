@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
@@ -31,6 +30,32 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #endregion
 
         #region Add<TValue>(Expression<Func<T, TValue>> expression)
+
+        #region Add()
+
+        [Fact]
+        public void Add_EmptyGridColumn()
+        {
+            columns.Add();
+
+            GridColumn<GridModel, Object> expected = new GridColumn<GridModel, Object>(columns.Grid, model => null);
+            GridColumn<GridModel, Object> actual = columns.Single() as GridColumn<GridModel, Object>;
+
+            Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.ProcessorType, actual.ProcessorType);
+            Assert.Equal(expected.IsFilterable, actual.IsFilterable);
+            Assert.Null(actual.Expression.Compile().Invoke(null));
+            Assert.Equal(expected.FilterName, actual.FilterName);
+            Assert.Equal(expected.CssClasses, actual.CssClasses);
+            Assert.Equal(expected.IsSortable, actual.IsSortable);
+            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.IsEncoded, actual.IsEncoded);
+            Assert.Equal(expected.Format, actual.Format);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Grid, actual.Grid);
+        }
+
+        #endregion
 
         [Fact]
         public void Add_GridColumn()
@@ -78,6 +103,33 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         #endregion
 
         #region Insert<TValue>(Int32 index, Expression<Func<T, TValue>> expression)
+
+        #region Insert(Int32 index)
+
+        [Fact]
+        public void Insert_EmptyGridColumn()
+        {
+            columns.Add(model => model.Name);
+            columns.Insert(0);
+
+            GridColumn<GridModel, Object> expected = new GridColumn<GridModel, Object>(columns.Grid, model => null);
+            GridColumn<GridModel, Object> actual = columns.First() as GridColumn<GridModel, Object>;
+
+            Assert.Equal(expected.Title.ToString(), actual.Title.ToString());
+            Assert.Equal(expected.ProcessorType, actual.ProcessorType);
+            Assert.Equal(expected.IsFilterable, actual.IsFilterable);
+            Assert.Null(actual.Expression.Compile().Invoke(null));
+            Assert.Equal(expected.FilterName, actual.FilterName);
+            Assert.Equal(expected.CssClasses, actual.CssClasses);
+            Assert.Equal(expected.IsSortable, actual.IsSortable);
+            Assert.Equal(expected.SortOrder, actual.SortOrder);
+            Assert.Equal(expected.IsEncoded, actual.IsEncoded);
+            Assert.Equal(expected.Format, actual.Format);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Grid, actual.Grid);
+        }
+
+        #endregion
 
         [Fact]
         public void Insert_GridColumn()
