@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <Version>3.4.0</Version>
-        <TargetFramework>net45</TargetFramework>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Version>4.0.0</Version>
+    <TargetFramework>net45</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.40804" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.40804" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="System.ComponentModel.DataAnnotations" />
-      <Reference Include="System.Web" />
-    </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
 
 </Project>
