@@ -67,6 +67,12 @@
                 </tr>
             }
         </tbody>
+        @if (Model.FooterPartialViewName)
+        {
+            <tfoot>
+                @Html.Partial(Model.FooterPartialViewName, Model)
+            </tfoot>
+        }
     </table>
     @if (Model.Pager != null)
     {
