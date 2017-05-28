@@ -38,7 +38,7 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         [Fact]
         public void SortOrder_Set_Caches()
         {
-            grid.Query = HttpUtility.ParseQueryString("Grid-Sort=Name&Grid-Order=Asc");
+            grid.Query = HttpUtility.ParseQueryString("Sort=Name&Order=Asc");
 
             column.SortOrder = null;
 
@@ -46,14 +46,23 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("Grid-Sort=Name&Grid-Order=", "Name", GridSortOrder.Desc, null)]
-        [InlineData("Grid-Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
-        [InlineData("Grid-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
-        [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
-        public void SortOrder_ReturnsFromQuery(String query, String name, GridSortOrder? initialOrder, GridSortOrder? order)
+        [InlineData("", "Sort=Name&Order=", "Name", GridSortOrder.Desc, null)]
+        [InlineData("", "Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("", "Sort=Name&Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData("", "Sort=Name&Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData(null, "Sort=Name&Order=", "Name", GridSortOrder.Desc, null)]
+        [InlineData(null, "Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData(null, "Sort=Name&Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData(null, "Sort=Name&Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=", "Name", GridSortOrder.Desc, null)]
+        [InlineData("Grid", "Grid-Order=Desc", null, GridSortOrder.Asc, GridSortOrder.Desc)]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Desc, GridSortOrder.Asc)]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Asc, GridSortOrder.Desc)]
+        public void SortOrder_ReturnsFromQuery(String gridName, String query, String name, GridSortOrder? initialOrder, GridSortOrder? order)
         {
             grid.Query = HttpUtility.ParseQueryString(query);
             column.InitialSortOrder = initialOrder;
+            grid.Name = gridName;
             column.Name = name;
 
             GridSortOrder? actual = column.SortOrder;
@@ -63,12 +72,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("Grid-Sort=Name&Grid-Order=", "Grid-Sort=Name&Grid-Order=Desc")]
-        [InlineData("Grid-Sort=Name&Grid-Order=Asc", "Grid-Sort=Name&Grid-Order=Desc")]
-        [InlineData("Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc")]
-        public void SortOrder_Get_Caches(String initialQuery, String changedQuery)
+        [InlineData("", "Sort=Name&Order=", "Sort=Name&Order=Desc")]
+        [InlineData("", "Sort=Name&Order=Asc", "Sort=Name&Order=Desc")]
+        [InlineData("", "Sort=Name&Order=Desc", "Sort=Name&Order=Asc")]
+        [InlineData(null, "Sort=Name&Order=", "Sort=Name&Order=Desc")]
+        [InlineData(null, "Sort=Name&Order=Asc", "Sort=Name&Order=Desc")]
+        [InlineData(null, "Sort=Name&Order=Desc", "Sort=Name&Order=Asc")]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=", "Grid-Sort=Name&Grid-Order=Desc")]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Asc", "Grid-Sort=Name&Grid-Order=Desc")]
+        [InlineData("Grid", "Grid-Sort=Name&Grid-Order=Desc", "Grid-Sort=Name&Grid-Order=Asc")]
+        public void SortOrder_Get_Caches(String gridName, String initialQuery, String changedQuery)
         {
             grid.Query = HttpUtility.ParseQueryString(initialQuery);
+            grid.Name = gridName;
+
             GridSortOrder? order = column.SortOrder;
 
             grid.Query = HttpUtility.ParseQueryString(changedQuery);
@@ -80,13 +97,20 @@ namespace NonFactors.Mvc.Grid.Tests.Unit
         }
 
         [Theory]
-        [InlineData("Grid-Order=Desc", "", GridSortOrder.Asc)]
-        [InlineData("Gride-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
-        [InlineData("RGrid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
-        public void SortOrder_NotFound_ReturnsInitialSortOrder(String query, String name, GridSortOrder? initialOrder)
+        [InlineData("", "-Order=Desc", "", GridSortOrder.Asc)]
+        [InlineData("", "e-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
+        [InlineData("", "R-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
+        [InlineData(null, "-Order=Desc", "", GridSortOrder.Asc)]
+        [InlineData(null, "e-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
+        [InlineData(null, "R-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
+        [InlineData("Grid", "Grid-Order=Desc", "", GridSortOrder.Asc)]
+        [InlineData("Grid", "Gride-Sort=Name&Grid-Order=Asc", "Name", GridSortOrder.Asc)]
+        [InlineData("Grid", "RGrid-Sort=Name&Grid-Order=Desc", "Name", GridSortOrder.Desc)]
+        public void SortOrder_NotFound_ReturnsInitialSortOrder(String gridName, String query, String name, GridSortOrder? initialOrder)
         {
             grid.Query = HttpUtility.ParseQueryString(query);
             column.InitialSortOrder = initialOrder;
+            grid.Name = gridName;
             column.Name = name;
 
             GridSortOrder? actual = column.SortOrder;

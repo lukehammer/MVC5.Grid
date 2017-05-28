@@ -110,19 +110,20 @@ namespace NonFactors.Mvc.Grid
 
         public IGridColumnFilter<T> GetFilter<T>(IGridColumn<T> column)
         {
+            String prefix = String.IsNullOrEmpty(column.Grid.Name) ? "" : column.Grid.Name + "-";
             String[] keys = column
                 .Grid
                 .Query
                 .AllKeys
                 .Where(key =>
-                    (key ?? "").StartsWith(column.Grid.Name + "-" + column.Name + "-") &&
-                    key != column.Grid.Name + "-" + column.Name + "-Op")
+                    (key ?? "").StartsWith(prefix + column.Name + "-") &&
+                    key != prefix + column.Name + "-Op")
                 .ToArray();
 
             GridColumnFilter<T> filter = new GridColumnFilter<T>();
-            filter.Second = GetSecondFilter(column, keys);
-            filter.First = GetFirstFilter(column, keys);
-            filter.Operator = GetOperator(column);
+            filter.Second = GetSecondFilter(prefix, column, keys);
+            filter.First = GetFirstFilter(prefix, column, keys);
+            filter.Operator = GetOperator(prefix, column);
             filter.Column = column;
 
             return filter;
@@ -162,7 +163,7 @@ namespace NonFactors.Mvc.Grid
 
             return filter;
         }
-        private IGridFilter GetSecondFilter<T>(IGridColumn<T> column, String[] keys)
+        private IGridFilter GetSecondFilter<T>(String prefix, IGridColumn<T> column, String[] keys)
         {
             if (column.IsMultiFilterable != true || keys.Length == 0)
                 return null;
@@ -172,28 +173,28 @@ namespace NonFactors.Mvc.Grid
                 String[] values = column.Grid.Query.GetValues(keys[0]);
                 if (values.Length < 2) return null;
 
-                String keyType = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
+                String keyType = keys[0].Substring((prefix + column.Name + "-").Length);
 
                 return GetFilter(column, keyType, values[1]);
             }
 
-            String type = keys[1].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
+            String type = keys[1].Substring((prefix + column.Name + "-").Length);
             String value = column.Grid.Query.GetValues(keys[1])[0];
 
             return GetFilter(column, type, value);
         }
-        private IGridFilter GetFirstFilter<T>(IGridColumn<T> column, String[] keys)
+        private IGridFilter GetFirstFilter<T>(String prefix, IGridColumn<T> column, String[] keys)
         {
             if (keys.Length == 0) return null;
 
-            String type = keys[0].Substring((column.Grid.Name + "-" + column.Name + "-").Length);
+            String type = keys[0].Substring((prefix + column.Name + "-").Length);
             String value = column.Grid.Query.GetValues(keys[0])[0];
 
             return GetFilter(column, type, value);
         }
-        private String GetOperator<T>(IGridColumn<T> column)
+        private String GetOperator<T>(String prefix, IGridColumn<T> column)
         {
-            String[] values = column.Grid.Query.GetValues(column.Grid.Name + "-" + column.Name + "-Op");
+            String[] values = column.Grid.Query.GetValues(prefix + column.Name + "-Op");
             if (column.IsMultiFilterable != true || values == null) return null;
 
             return values[0];
