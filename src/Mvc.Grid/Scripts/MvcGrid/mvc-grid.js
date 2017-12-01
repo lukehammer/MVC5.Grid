@@ -283,8 +283,7 @@ var MvcGrid = (function () {
             var arrowLeft = 15;
 
             if (filterLeft + popupWidth + 5 > winWidth) {
-                popupLeft = winWidth - popupWidth - 14;
-                arrowLeft = filterLeft - popupLeft + 7;
+                $('.mvc-grid-popup').css('width', '200px');
             }
 
             arrow.css('left', arrowLeft + 'px');
